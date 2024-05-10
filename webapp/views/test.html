@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test User Registration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Test User Registration</h1>
+    <form id="test-form">
+        <input type="text" id="nome" placeholder="Nome" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="text" id="nick" placeholder="Nick" required><br>
+        <input type="password" id="senha" placeholder="Senha" required><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#test-form').on('submit', function(event) {
+                event.preventDefault();
+
+                var userData = {
+                    nome: $('#nome').val(),
+                    email: $('#email').val(),
+                    nick: $('#nick').val(),
+                    senha: $('#senha').val()
+                };
+
+                console.log("Sending user data:", userData);
+
+                $.ajax({
+                    url: '/usuarios',  // Adjust this URL to your actual server endpoint
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function(response) {
+                        console.log('Success:', response);
+                        alert('User registered successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', status, error);
+                        alert('Failed to register user.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
