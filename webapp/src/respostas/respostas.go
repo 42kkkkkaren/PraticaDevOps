@@ -16,3 +16,15 @@ func JSON(w http.ResponseWriter, statusCode int, dados interface{}) {
 		return
 	}
 }
+
+// Erro retorna um erro em formato JSON
+type ErroAPI struct {
+	Erro string `json:"erro"`
+}
+
+// TratarStatusCodeDeErro trata o status code de erro 400 ou superior
+func TratarStatusCodeDeErro(w http.ResponseWriter, r *http.Response) {
+	var erro ErroAPI
+	json.NewDecoder(r.Body).Decode(&erro)
+	JSON(w, r.StatusCode, erro)
+}
