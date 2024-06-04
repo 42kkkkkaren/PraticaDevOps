@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"webapp/src/config"
 	"webapp/src/respostas"
 )
 
 // CriarUsuario chama a API para cadastrar um usuario no banco de dados
 func CriarUsuario(w http.ResponseWriter, r *http.Request) {
-	log.Println("CriarUsuario handler called")
 	r.ParseForm()
 
 	usuario, erro := json.Marshal(map[string]string{
@@ -26,9 +25,8 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received user data: %s\n", usuario)
-
-	response, erro := http.Post("http://localhost:8080/usuarios", "application/json", bytes.NewBuffer(usuario))
+	url := fmt.Sprintf("%s/usuarios", config.APIURL)
+	response, erro := http.Post(url, "application/json", bytes.NewBuffer(usuario))
 	if erro != nil {
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
