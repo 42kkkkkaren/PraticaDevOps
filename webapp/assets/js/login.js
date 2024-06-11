@@ -4,14 +4,14 @@ function fazerLogin(evento) {
     evento.preventDefault();
 
     $.ajax({
-        url: 'http://localhost:8080/login',
+        url: '/login',
         method: 'POST',
         data: {
             email: $('#email').val(),
-            senha: $('#senha').val()
+            senha: $('#senha').val(),
         }
     }).done(function(){
-        window.location = 'http://localhost:8080/home';
+        window.location = '/home';
     }).fail(function(){
         alert('Usuário ou senha inválidos');
     });

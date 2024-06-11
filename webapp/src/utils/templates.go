@@ -1,23 +1,19 @@
 package utils
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
 var templates *template.Template
 
-// CarregarTemplates carrega todos os templates do diretorio views
+// CarregarTemplates insere os templates html na variável templates
 func CarregarTemplates() {
 	templates = template.Must(template.ParseGlob("views/*.html"))
+	//templates = template.Must(templates.ParseGlob("views/templates/*.html"))
 }
 
-// CarregarTemplates executa um template específico com os dados providos
-func ExecutarTemplates(w http.ResponseWriter, template string, dados interface{}) error {
-	erro := templates.ExecuteTemplate(w, template, dados)
-	if erro != nil {
-		return erro
-	}
-
-	return nil
+// ExecutarTemplate renderiza uma página html na tela
+func ExecutarTemplate(w http.ResponseWriter, template string, dados interface{}) {
+	templates.ExecuteTemplate(w, template, dados)
 }
