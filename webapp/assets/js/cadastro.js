@@ -1,39 +1,34 @@
 $('#formulario-cadastro').on('submit', criarUsuario);
 
-function criarUsuario(evento) {
-    evento.preventDefault();
+function criarUsuario(event) {
+    event.preventDefault();
+    console.log("Handler for form submit invoked.");
 
-    if ($('#senha').val() != $('#confirmar-senha').val()) {
-        Swal.fire("Ops...", "As senhas não coincidem!", "error");
+    if ($('#senha').val() !== $('#confirmar-senha').val()) {
+        alert("As senhas não coincidem");
         return;
     }
 
     $.ajax({
-        url: "/usuarios",
+        url: "http://localhost:5000/usuarios", // Use a URL correta da API
         method: "POST",
-        data: {
-           nome: $('#nome').val(), 
-           email: $('#email').val(),
-           nick: $('#nick').val(),
-           senha: $('#senha').val()
+        contentType: "application/json", // Adicionando contentType para JSON
+        data: JSON.stringify({
+            nome: $('#nome').val(),
+            email: $('#email').val(),
+            nick: $('#nick').val(),
+            senha: $('#senha').val(),
+        }),
+        success: function(data) {
+            alert("Usuário cadastrado com sucesso!");
+            window.location.href = "/login";
+        },
+        error: function(xhr) {
+            if (xhr.status === 409) { // Conflito de duplicação
+                alert("Erro: " + xhr.responseJSON.erro);
+            } else {
+                alert("Erro ao cadastrar usuário");
+            }
         }
-    }).done(function() {
-        Swal.fire("Sucesso!", "Usuário cadastrado com sucesso!", "success")
-            .then(function() {
-                $.ajax({
-                    url: "/login",
-                    method: "POST",
-                    data: {
-                        email: $('#email').val(),
-                        senha: $('#senha').val()
-                    }
-                }).done(function() {
-                    window.location = "/home";
-                }).fail(function() {
-                    Swal.fire("Ops...", "Erro ao autenticar o usuário!", "error");
-                })
-            })
-    }).fail(function() {
-        Swal.fire("Ops...", "Erro ao cadastrar o usuário!", "error");
     });
 }
