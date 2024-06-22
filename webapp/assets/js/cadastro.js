@@ -9,22 +9,32 @@ function criarUsuario(event) {
         return;
     }
 
+    const usuario = {
+        nome: $('#nome').val(),
+        email: $('#email').val(),
+        nick: $('#nick').val(),
+        senha: $('#senha').val()
+    };
+
+    console.log("Dados do usuário:", usuario);
+
     $.ajax({
-        url: "http://localhost:5000/usuarios", // Use a URL correta da API
+        url: "http://localhost:5000/usuarios", // Certifique-se de que a URL está correta
         method: "POST",
-        contentType: "application/json", // Adicionando contentType para JSON
-        data: JSON.stringify({
-            nome: $('#nome').val(),
-            email: $('#email').val(),
-            nick: $('#nick').val(),
-            senha: $('#senha').val(),
-        }),
-        success: function(data) {
+        contentType: "application/json",
+        data: JSON.stringify(usuario),
+        success: function(data, textStatus, xhr) {
+            console.log("Resposta da API: ", data);
+            console.log("Status da resposta: ", textStatus);
+            console.log("Código de status HTTP: ", xhr.status);
             alert("Usuário cadastrado com sucesso!");
             window.location.href = "/login";
         },
-        error: function(xhr) {
-            if (xhr.status === 409) { // Conflito de duplicação
+        error: function(xhr, textStatus, errorThrown) {
+            console.error("Erro na resposta da API: ", xhr);
+            console.log("Status da resposta: ", textStatus);
+            console.log("Erro lançado: ", errorThrown);
+            if (xhr.responseJSON && xhr.responseJSON.erro) {
                 alert("Erro: " + xhr.responseJSON.erro);
             } else {
                 alert("Erro ao cadastrar usuário");

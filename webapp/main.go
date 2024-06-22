@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"webapp/src/config"
 	"webapp/src/cookies"
+	"webapp/src/middlewares"
 	"webapp/src/router"
 	"webapp/src/utils"
 )
@@ -15,6 +16,8 @@ func main() {
 	cookies.Configurar()
 	utils.CarregarTemplates()
 	r := router.Gerar()
+
+	r.Use(middlewares.EnableCors)
 
 	fmt.Printf("Escutando na porta %d\n", config.Porta)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Porta), r))
