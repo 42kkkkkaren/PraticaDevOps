@@ -17,9 +17,11 @@ func Logger(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 // Autenticar verifica a existência de cookies
 func Autenticar(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Middleware de autenticação chamado para:", r.RequestURI)
 		// Verifica se o usuário está autenticado
 		if _, erro := cookies.Ler(r); erro != nil {
-			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			log.Println("Usuário não autenticado, redirecionando para login")
+			http.Redirect(w, r, "/login", 302)
 			return
 		}
 		proximaFuncao(w, r)

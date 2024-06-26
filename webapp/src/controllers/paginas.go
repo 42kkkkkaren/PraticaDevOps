@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"webapp/src/config"
 	"webapp/src/modelos"
@@ -21,6 +22,8 @@ func CarregarPaginaDeCadastroDeUsuario(w http.ResponseWriter, r *http.Request) {
 
 // CarregarPaginaPrincipal renderiza a página principal com as publicações
 func CarregarPaginaPrincipal(w http.ResponseWriter, r *http.Request) {
+	log.Println("Carregar PaginaPrincipal chamado")	
+
 	url := fmt.Sprintf("%s/publicacoes", config.APIURL)
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 	if erro != nil {
